@@ -50,7 +50,7 @@ apt-get update
 apt-get install mariadb-server
 service mysql restart -> mysql 재기동
 mysql_secure_installation -> 비밀번호 초기화 후 y
-pip install mysqlclient
+
 
 mysql -u root -p (접속)
 

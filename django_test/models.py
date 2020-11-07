@@ -13,8 +13,8 @@ class Book(models.Model):
 
 
 # create table sample (
-# id int primary key auto_increment,
-# book_name varchar(255) primary key,
+# id int auto_increment,
+# book_name varchar(255),
 # created_at datetime default now()
-# );
+# primary key(id,book_name));
 

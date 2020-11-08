@@ -14,7 +14,7 @@ class Book(models.Model):
 
 # create table sample (
 # id int auto_increment,
-# book_name varchar(255),
-# created_at datetime default now()
+# book_name varchar(30),
+# created_at datetime default now(),
 # primary key(id,book_name));
 

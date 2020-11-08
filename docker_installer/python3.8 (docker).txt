@@ -38,7 +38,7 @@ cd /code
 . venv/bin/activate
 git clone (깃허브 주소)
 (이후 세부 branch 조정)
-cd cms
+cd Django-Tutorial
 git fetch --all
 vi requirements.txt (맨 밑에 있는 z로 되있는 것을 삭제) (있을시)
 mkdir log

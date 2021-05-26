@@ -77,3 +77,9 @@ django-admin startproject [이름]
 프로젝트 안에서 파이썬 파일 생성
 python manage.py startapp [이름]
 python manage.py runserver 0.0.0.0:8000
+
+ create table sample (
+ id int auto_increment,
+ book_name varchar(30),
+ created_at datetime default now(),
+ primary key(id,book_name));

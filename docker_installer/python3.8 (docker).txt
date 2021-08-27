@@ -59,7 +59,10 @@ cd Django-Tutorial
 git fetch --all
 vi requirements.txt (맨 밑에 있는 z로 되있는 것을 삭제) (있을시)
 mkdir log
+chmod 777 log
 pip install -r requirements.txt
+
+
 
 
 -------------#mariadb 설치-------------
@@ -100,3 +103,71 @@ python manage.py runserver 0.0.0.0:8000
  book_name varchar(30),
  created_at datetime default now(),
  primary key(id,book_name));
+ 
+ 
+ -------------- Uwsgi--------------
+apt-get install -y uwsgi uwsgi-src
+vi /etc/uwsgi/apps-available/cms.ini
+<uwsgi 설정>
+[uwsgi]
+env =  LANG=ko_KR.utf8
+host = true
+plugin = python36
+chmod-socket = 666
+socket = /tmp/Django-Tutorial.sock
+master = true
+enable-threads = true
+processes = 2
+threads = 8
+venv = /code/venv
+wsgi-file = /code/Django-Tutorial/django_test/wsgi.py
+chdir = /code/Django-Tutorial
+
+ln -s /etc/uwsgi/apps-available/cms.ini /etc/uwsgi/apps-enabled/cms.ini
+apt-get install uwsgi-plugin-python3
+cd /tmp
+export PYTHON=python3.6
+uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python36"
+mv python36_plugin.so /usr/lib/uwsgi/plugins/python36_plugin.so
+ls -al /usr/lib/uwsgi/plugins/python36_plugin.so
+chmod 644 /usr/lib/uwsgi/plugins/python36_plugin.so
+service uwsgi restart
+tail -f /var/log/uwsgi/app/cms.log 
+
+-------------- Nginx --------------
+cd /tmp/
+wget http://nginx.org/keys/nginx_signing.key (키 받을수 있을시 가능)
+apt-key add nginx_signing.key (키 받을수 있을시 가능)
+apt-get update
+apt install -y nginx
+nginx -v
+
+<nginx 설정>
+vi /etc/nginx/sites-available/cms
+
+server {
+        listen 80 default_server;
+
+        server_name cms.kr;
+
+        access_log /var/log/nginx/access.log;
+        error_log /var/log/nginx/error.log;
+
+        location / {
+            uwsgi_pass unix:///tmp/Django-Tutorial.sock;
+            include uwsgi_params;
+        }
+
+        location /static/ {
+            alias /code/cms/backend/static/;
+            expires -1;
+        }
+}
+
+vi /etc/nginx/sites-available/default
+server {
+        listen 80;
+        listen [::]:80;
+
+ln -s /etc/nginx/sites-available/cms /etc/nginx/sites-enabled/cms
+service nginx restart

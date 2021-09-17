@@ -174,3 +174,5 @@ service nginx restart
 
 (만약에 다른지역에서 접속이 안될경우 setting.py에 저렇게 ALLOWED_HOSTS 리스트에 아이피를 추가해주면 된다)
 ALLOWED_HOSTS = ['198.211.99.20', 'localhost'] 
+모든 아이피 허용
+ALLOWED_HOSTS = ['*'] 
